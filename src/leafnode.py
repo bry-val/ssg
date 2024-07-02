@@ -2,7 +2,10 @@ from htmlnode import HTMLNode
 
 
 class LeafNode(HTMLNode):
+    # props is optional
+    # value is required
     def __init__(self, tag, value, props=None):
+        assert value is not None, "Value is required"
         super().__init__(tag=tag, value=value, props=props)
 
     def to_html(self):
