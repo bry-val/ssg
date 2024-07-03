@@ -21,5 +21,5 @@ class HTMLNode:
     def props_to_html(self):
         string = ""
         for key, val in self.props.items():
-            string += f"{key}=\"{val}\" "
+            string += f'{key}="{val}" '
         return string.rstrip()

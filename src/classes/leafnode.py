@@ -18,4 +18,6 @@ class LeafNode(HTMLNode):
     def string_builder(self):
         if self.props is None:
             return f"<{self.tag}>{self.value}</{self.tag}>"
+        if self.tag == "img":
+            return f"<{self.tag} {self.props_to_html()}>{self.value}"
         return f"<{self.tag} {self.props_to_html()}>{self.value}</{self.tag}>"
