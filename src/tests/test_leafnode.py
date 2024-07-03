@@ -1,6 +1,5 @@
 import unittest
-
-from leafnode import LeafNode
+from src.classes.leafnode import LeafNode
 
 
 class TestLeafNode(unittest.TestCase):
@@ -13,6 +12,9 @@ class TestLeafNode(unittest.TestCase):
         # LeafNode.value cannot be empty
         with self.assertRaises(AssertionError):
             LeafNode(tag=None, value=None, props=None)
+
+        with self.assertRaises(AssertionError):
+            LeafNode()
 
     def test_to_html(self):
         node1 = LeafNode("p", "This is a paragraph of text.")
