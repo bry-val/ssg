@@ -1,5 +1,5 @@
 from src.classes.textnode import TextNode
-from src.utils.functions import *
+from src.utils.node_functions import *
 
 
 def main():

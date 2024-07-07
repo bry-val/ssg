@@ -2,6 +2,7 @@ from src.classes.leafnode import LeafNode
 from src.classes.textnode import TextNode
 import re
 
+# CONSTANTS
 TEXT_TYPE_TEXT, TEXT_TYPE_BOLD, TEXT_TYPE_ITALIC, TEXT_TYPE_CODE, TEXT_TYPE_LINK, TEXT_TYPE_IMAGE = "text", "bold", "italic", "code", "link", "image"
 
 
@@ -22,8 +23,6 @@ def text_node_to_html_node(text_node):
         case _:
             raise ValueError("Text type is invalid")
 
-
-# [TextNode(This is **text** with an *italic* word and a `code block` and an , text, None), TextNode(image, image, https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png), TextNode( and a , text, None), TextNode(link, link, https://boot.dev)]
 
 def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str) -> list:
     if not isinstance(old_nodes, list):
@@ -52,28 +51,6 @@ def extract_markdown_links(text):
     pattern = r"\[(.*?)\]\((.*?)\)"
     matches = re.findall(pattern, text)
     return matches
-
-
-link_node1 = TextNode(
-    "1. This is text with an ![link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
-    TEXT_TYPE_TEXT,
-)
-
-link_node2 = TextNode(
-    "2. This is text with an ![third link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![fourth link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
-    TEXT_TYPE_TEXT,
-)
-
-link_node3 = TextNode(
-    "3. This is text with an ![fifth link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![sixth link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
-    TEXT_TYPE_TEXT,
-)
-
-image_node = TextNode(
-    "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) "
-    "and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
-    TEXT_TYPE_TEXT,
-)
 
 
 def split_nodes_image(old_nodes):
@@ -125,19 +102,3 @@ def text_to_textnodes(text):
     bold_split = split_nodes_delimiter(code_split, '**', TEXT_TYPE_BOLD)
     italic_split = split_nodes_delimiter(bold_split, '*', TEXT_TYPE_ITALIC)
     return italic_split
-
-
-markdown = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
-print(text_to_textnodes(markdown) == [
-    TextNode("This is ", TEXT_TYPE_TEXT),
-    TextNode("text", TEXT_TYPE_BOLD),
-    TextNode(" with an ", TEXT_TYPE_TEXT),
-    TextNode("italic", TEXT_TYPE_ITALIC),
-    TextNode(" word and a ", TEXT_TYPE_TEXT),
-    TextNode("code block", TEXT_TYPE_CODE),
-    TextNode(" and an ", TEXT_TYPE_TEXT),
-    TextNode("image", TEXT_TYPE_IMAGE,
-             "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
-    TextNode(" and a ", TEXT_TYPE_TEXT),
-    TextNode("link", TEXT_TYPE_LINK, "https://boot.dev"),
-])
