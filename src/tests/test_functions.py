@@ -6,3 +6,6 @@ import unittest
 class test_functions(unittest.TestCase):
     def test_text_node_to_html_node(self):
         text_node_to_html_node(TextNode())
+
+    def test_split_nodes_delimiter(self):
+        pass
