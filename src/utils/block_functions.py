@@ -74,9 +74,16 @@ def ul_to_html(block):
 
 def ol_to_html(block):
     lines = block.splitlines()
-    children = []
-    for line in lines:
-        children.append(LeafNode(tag="li", value=line[3:]))
+    html_nodes = [
+        "".join(
+            text_node_to_html_node(node).to_html()
+            for node in text_to_textnodes(line[3:])
+        )
+        for line in lines
+    ]
+    children = [
+        LeafNode(tag="li", value=html) for html in html_nodes
+    ]
     return ParentNode(tag="ol", children=children).to_html()
 
 
@@ -157,9 +164,9 @@ def block_to_html(block, block_type):
         return heading_to_html(block)
 
 
-print(block_to_html(ul_block, BLOCK_TYPE_UNORDERED_LIST))
-print(block_to_html(quote_block, BLOCK_TYPE_QUOTE))
+# print(block_to_html(ul_block, BLOCK_TYPE_UNORDERED_LIST))
+# print(block_to_html(quote_block, BLOCK_TYPE_QUOTE))
 print(block_to_html(ol_block, BLOCK_TYPE_ORDERED_LIST))
-print(block_to_html(p_block, BLOCK_TYPE_PARAGRAPH))
-print(block_to_html(code_block, BLOCK_TYPE_CODE))
-print(block_to_html(heading_block, BLOCK_TYPE_HEADING))
+# print(block_to_html(p_block, BLOCK_TYPE_PARAGRAPH))
+# print(block_to_html(code_block, BLOCK_TYPE_CODE))
+# print(block_to_html(heading_block, BLOCK_TYPE_HEADING))

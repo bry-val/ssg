@@ -68,8 +68,8 @@ def split_nodes_image(old_nodes):
             new_nodes.append(TextNode(lister[0], TEXT_TYPE_TEXT))
             new_nodes.append(TextNode(image[0], TEXT_TYPE_IMAGE, image[1]))
             original_text = lister[1]
-        if original_text != "":
-            new_nodes.append(TextNode(original_text, TEXT_TYPE_TEXT))
+            if original_text != "":
+                new_nodes.append(TextNode(original_text, TEXT_TYPE_TEXT))
     return new_nodes
 
 
