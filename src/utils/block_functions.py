@@ -21,6 +21,23 @@ def check_unordered_list(lines):
     return True
 
 
+def check_heading_type(block):
+    if block.startswith("######"):
+        return "h6", block[7:]
+    elif block.startswith("#####"):
+        return "h5", block[6:]
+    elif block.startswith("####"):
+        return "h4", block[5:]
+    elif block.startswith("###"):
+        return "h3", block[4:]
+    elif block.startswith("##"):
+        return "h2", block[3:]
+    elif block.startswith("#"):
+        return "h1", block[2:]
+    else:
+        raise ValueError("Not valid heading")
+
+
 def check_ordered_list(lines):
     counter = 1
     for line in lines:
@@ -44,20 +61,28 @@ def paragraph_to_html(block):
 
 
 def heading_to_html(block):
-    node = LeafNode(value="")
-    if block.startswith("######"):
-        node = LeafNode(tag="h6", value=block[6:])
-    elif block.startswith("#####"):
-        node = LeafNode(tag="h5", value=block[5:])
-    elif block.startswith("####"):
-        node = LeafNode(tag="h4", value=block[4:])
-    elif block.startswith("###"):
-        node = LeafNode(tag="h3", value=block[3:])
-    elif block.startswith("##"):
-        node = LeafNode(tag="h2", value=block[2:])
-    elif block.startswith("#"):
-        node = LeafNode(tag="h1", value=block[1:])
-    return node.to_html()
+    lines = block.splitlines()
+    html_nodes = [
+        "".join(
+            text_node_to_html_node(node).to_html()
+            for node in text_to_textnodes(line)
+        )
+        for line in lines
+    ]
+    tag, value = check_heading_type("".join(html_nodes))
+    # if block.startswith("######"):
+    #     node = LeafNode(tag="h6", value=block[7:])
+    # elif block.startswith("#####"):
+    #     node = LeafNode(tag="h5", value=block[6:])
+    # elif block.startswith("####"):
+    #     node = LeafNode(tag="h4", value=block[5:])
+    # elif block.startswith("###"):
+    #     node = LeafNode(tag="h3", value=block[4:])
+    # elif block.startswith("##"):
+    #     node = LeafNode(tag="h2", value=block[3:])
+    # elif block.startswith("#"):
+    #     node = LeafNode(tag="h1", value=block[2:])
+    return LeafNode(tag=tag, value=value).to_html()
 
 
 def code_to_html(block):
@@ -146,7 +171,7 @@ md = """ This is **bolded** paragraph
 >This is the same paragraph on a new line
 
 * This is a list **there is also bold** and *italics*
-* with items and inline `code` tags. 
+* with items and inline `code` tags.
 
 1. This is another **paragraph** with *italic* text and `code` here
 2. This is the same paragraph on a new line
@@ -159,20 +184,22 @@ for i in range(3):
     print(i)
 ```
 
-###This is the same paragraph on a new line
+### This is the same *paragraph* `on` **a new line**
 
 """
 
-ul_block = markdown_to_blocks(md)[2]
-quote_block = markdown_to_blocks(md)[1]
-ol_block = markdown_to_blocks(md)[3]
-p_block = markdown_to_blocks(md)[4]
-code_block = markdown_to_blocks(md)[5]
-heading_block = markdown_to_blocks(md)[6]
+
+# ul_block = markdown_to_blocks(md)[2]
+# quote_block = markdown_to_blocks(md)[1]
+# ol_block = markdown_to_blocks(md)[3]
+# p_block = markdown_to_blocks(md)[4]
+# code_block = markdown_to_blocks(md)[5]
+# heading_block = markdown_to_blocks(md)[6]
 
 
 # TODO: Inline block parsing of markdown.
-def block_to_html(block, block_type):
+def block_to_html(block):
+    block_type = block_to_block_type(block)
     if block_type == BLOCK_TYPE_UNORDERED_LIST:
         return ul_to_html(block)
     elif block_type == BLOCK_TYPE_QUOTE:
@@ -186,10 +213,9 @@ def block_to_html(block, block_type):
     elif block_type == BLOCK_TYPE_HEADING:
         return heading_to_html(block)
 
-
-print(block_to_html(ul_block, BLOCK_TYPE_UNORDERED_LIST))
-print(block_to_html(quote_block, BLOCK_TYPE_QUOTE))
-print(block_to_html(ol_block, BLOCK_TYPE_ORDERED_LIST))
-print(block_to_html(p_block, BLOCK_TYPE_PARAGRAPH))
-print(block_to_html(code_block, BLOCK_TYPE_CODE))
-print(block_to_html(heading_block, BLOCK_TYPE_HEADING))
+# print(block_to_html(ul_block, BLOCK_TYPE_UNORDERED_LIST))
+# print(block_to_html(quote_block, BLOCK_TYPE_QUOTE))
+# print(block_to_html(ol_block, BLOCK_TYPE_ORDERED_LIST))
+# print(block_to_html(p_block, BLOCK_TYPE_PARAGRAPH))
+# print(block_to_html(code_block, BLOCK_TYPE_CODE))
+# print(block_to_html(heading_block))
