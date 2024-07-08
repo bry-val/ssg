@@ -31,7 +31,16 @@ def check_ordered_list(lines):
 
 
 def paragraph_to_html(block):
-    return LeafNode(tag="p", value=block).to_html()
+    lines = block.splitlines()
+    html_nodes = [
+        "".join(
+            text_node_to_html_node(node).to_html()
+            for node in text_to_textnodes(line)
+        )
+        for line in lines
+    ]
+
+    return LeafNode(tag="p", value="\n".join(html_nodes)).to_html()
 
 
 def heading_to_html(block):
@@ -58,17 +67,31 @@ def code_to_html(block):
 
 def quote_to_html(block):
     lines = block.splitlines()
-    children = []
-    for line in lines:
-        children.append(LeafNode(tag="p", value=line[1:]))
+    html_nodes = [
+        "".join(
+            text_node_to_html_node(node).to_html()
+            for node in text_to_textnodes(line[1:])
+        )
+        for line in lines
+    ]
+    children = [
+        LeafNode(tag="p", value=html) for html in html_nodes
+    ]
     return ParentNode(tag="blockquote", children=children).to_html()
 
 
 def ul_to_html(block):
     lines = block.splitlines()
-    children = []
-    for line in lines:
-        children.append(LeafNode(tag="li", value=line))
+    html_nodes = [
+        "".join(
+            text_node_to_html_node(node).to_html()
+            for node in text_to_textnodes(line[1:])
+        )
+        for line in lines
+    ]
+    children = [
+        LeafNode(tag="li", value=html) for html in html_nodes
+    ]
     return ParentNode(tag="ul", children=children).to_html()
 
 
@@ -122,14 +145,14 @@ md = """ This is **bolded** paragraph
 >This is another paragraph with *italic* text and `code` here
 >This is the same paragraph on a new line
 
-* This is a list
-* with items
+* This is a list **there is also bold** and *italics*
+* with items and inline `code` tags. 
 
-1. This is another paragraph with *italic* text and `code` here
+1. This is another **paragraph** with *italic* text and `code` here
 2. This is the same paragraph on a new line
 
 This is another paragraph with *italic* text and `code` here
-This is the same paragraph on a new line
+This is the *same* `paragraph` on a new line
 
 ```
 for i in range(3):
@@ -164,9 +187,9 @@ def block_to_html(block, block_type):
         return heading_to_html(block)
 
 
-# print(block_to_html(ul_block, BLOCK_TYPE_UNORDERED_LIST))
-# print(block_to_html(quote_block, BLOCK_TYPE_QUOTE))
+print(block_to_html(ul_block, BLOCK_TYPE_UNORDERED_LIST))
+print(block_to_html(quote_block, BLOCK_TYPE_QUOTE))
 print(block_to_html(ol_block, BLOCK_TYPE_ORDERED_LIST))
-# print(block_to_html(p_block, BLOCK_TYPE_PARAGRAPH))
-# print(block_to_html(code_block, BLOCK_TYPE_CODE))
-# print(block_to_html(heading_block, BLOCK_TYPE_HEADING))
+print(block_to_html(p_block, BLOCK_TYPE_PARAGRAPH))
+print(block_to_html(code_block, BLOCK_TYPE_CODE))
+print(block_to_html(heading_block, BLOCK_TYPE_HEADING))

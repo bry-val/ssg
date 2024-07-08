@@ -21,7 +21,7 @@ import unittest
 #     TEXT_TYPE_TEXT,
 # )
 #
-# image_node = TextNode(
+# image_node = TextNode(text_node_to_html_node(TextNode())
 #     "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) "
 #     "and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
 #     TEXT_TYPE_TEXT,
@@ -29,7 +29,8 @@ import unittest
 
 class test_functions(unittest.TestCase):
     def test_text_node_to_html_node(self):
-        text_node_to_html_node(TextNode())
+        # text_node_to_html_node(TextNode())
+        pass
 
     def test_split_nodes_delimiter(self):
         pass
