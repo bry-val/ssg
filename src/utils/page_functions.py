@@ -39,9 +39,6 @@ def generate_page(from_path, template_path, dest_path):
         html.append(block_to_html(block))
     dir_copy('/home/bryan/bootdev/ssg/static', '/home/bryan/bootdev/ssg/public')
     with open(dest_path, 'w') as outfile:
-        outfile.write(template.replace("{{ Title }}", extract_title(md_blocks)).replace("{{ Content }}", "".join(html)))
+        outfile.write(
+            template.replace("{{ Title }}", extract_title(md_blocks)).replace("{{ Content }}", "\n".join(html)))
     return
-
-
-print(generate_page("/home/bryan/bootdev/ssg/content/index.md", "/home/bryan/bootdev/ssg/template.html",
-                    "/home/bryan/bootdev/ssg/public/index.html"))
