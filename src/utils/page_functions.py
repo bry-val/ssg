@@ -14,6 +14,7 @@ def extract_title(markdown_blocks):
 def dir_copy(static_dir, public_dir):
     if os.path.exists(public_dir):
         shutil.rmtree(public_dir)
+
     os.mkdir(public_dir)
 
     if not os.path.exists(static_dir):
@@ -29,16 +30,39 @@ def dir_copy(static_dir, public_dir):
 
 
 def generate_page(from_path, template_path, dest_path):
-    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    with open(from_path, 'r') as md_file:
+    md_filepath = os.path.join(from_path, 'index.md')
+    html_filepath = os.path.join(dest_path, 'index.html')
+
+    # Ensure the destination directory exists
+    os.makedirs(os.path.dirname(html_filepath), exist_ok=True)
+
+    print(f"Generating page from {md_filepath} to {html_filepath} using {template_path}")
+
+    with open(md_filepath, 'r') as md_file:
         md_blocks = markdown_to_blocks(md_file.read())
+    html = [block_to_html(block) for block in md_blocks]
+
     with open(template_path, 'r') as template_file:
         template = template_file.read()
-    html = []
-    for block in md_blocks:
-        html.append(block_to_html(block))
-    dir_copy('/home/bryan/bootdev/ssg/static', '/home/bryan/bootdev/ssg/public')
-    with open(dest_path, 'w') as outfile:
+
+    with open(html_filepath, 'w') as outfile:
         outfile.write(
             template.replace("{{ Title }}", extract_title(md_blocks)).replace("{{ Content }}", "\n".join(html)))
-    return
+
+
+DESTINATION = "/home/bryan/bootdev/ssg"
+TEMPLATE_PATH = "/home/bryan/bootdev/ssg/template.html"
+
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    for root, dirs, files in os.walk(dir_path_content):
+        for file in files:
+            if file == 'index.md':  # Only process 'index.md' files
+                from_path = root
+                relative_path = os.path.relpath(root, dir_path_content)
+                dest_path = os.path.join(dest_dir_path, relative_path)
+
+                # Ensure the destination directory exists
+                os.makedirs(dest_path, exist_ok=True)
+
+                generate_page(from_path, template_path, dest_path)
