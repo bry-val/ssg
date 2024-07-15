@@ -1,3 +1,4 @@
+#README WIP
 # SwiftSite: Python-Powered Static Site Generator
 
 SwiftSite is a nimble, adaptable, and user-friendly static site generator crafted in Python. It empowers you to build
