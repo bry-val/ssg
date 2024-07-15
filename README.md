@@ -2,13 +2,13 @@
 
 This simple yet powerful tool transforms your raw Markdown files into clean, static HTML web pages. Ideal for blogs, portfolios, documentation, or any content that benefits from fast loading times and simple hosting.
 
-Features
+## Features
 
 Markdown Conversion: Seamlessly converts your Markdown documents (.md) into fully-formatted HTML files.
 Static Page Generation: Outputs ready-to-deploy static HTML pages, optimized for performance and security.
 Customizable Templates: (Optional) Use templates to define the layout and styling of your generated pages.
 Easy to Use: Download, import, and start converting your Markdown in minutes.
-Getting Started
+## Getting Started
 
 Download: Clone this repository or download the source code.
 Import: Import the generator into your project.
@@ -22,10 +22,10 @@ Contribute
 
 Contributions are welcome! Feel free to open issues or pull requests to help improve this project.
 
-License
+## License
 
 This project is licensed under the MIT License.
 
-Disclaimer:
+## Disclaimer:
 
 This project is currently in its early stages and is primarily designed for importing and direct use. A future release will make it easy to install and use from the command line.
